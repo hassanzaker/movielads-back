@@ -31,8 +31,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
-ALLOWED_HOSTS.append('https://main.dri7vaiit2zh6.amplifyapp.com')
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# ALLOWED_HOSTS.append('https://main.dri7vaiit2zh6.amplifyapp.com')
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
