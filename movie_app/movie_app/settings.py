@@ -134,7 +134,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'https://main.dri7vaiit2zh6.amplifyapp.com',
+    'https://52.15.132.172',  # Include your EC2 public IP
 ]
+
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True  # Important for cross-site cookies
