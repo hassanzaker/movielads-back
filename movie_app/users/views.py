@@ -62,7 +62,6 @@ def signin(request):
 
 
 
-@csrf_exempt
 @api_view(['POST'])
 def logout(request):
     print("ASF")
@@ -76,5 +75,4 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def home(request):
     user = request.user
-    print("YY:", user.data)
     return Response({"message": f"Welcome, {user.username}"}, status=200)
