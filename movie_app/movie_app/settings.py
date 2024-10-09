@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 # ALLOWED_HOSTS: Include your domain and subdomains
-ALLOWED_HOSTS = ['movielads.net', 'api.movielads.net', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['movielads.net', '52.15.132.172', 'api.movielads.net', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
