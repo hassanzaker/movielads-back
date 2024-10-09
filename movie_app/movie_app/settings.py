@@ -20,12 +20,19 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY SETTINGS
-SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['*']
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# APPLICATION DEFINITION
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret-key')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+
+# ALLOWED_HOSTS: Include your domain and subdomains
+ALLOWED_HOSTS = ['movielads.net', 'api.movielads.net', 'localhost', '127.0.0.1']
+
+# Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -33,33 +40,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    
-    # Third-party apps
     'corsheaders',
+    'users',
     'rest_framework',
     'storages',
-
-    # Your apps
-    'users',
 ]
 
 MIDDLEWARE = [
-    # CORS and security middlewares should go early
     'corsheaders.middleware.CorsMiddleware',
-    "django.middleware.security.SecurityMiddleware",
-    
-    # Common middleware for request and response handling
     'django.middleware.common.CommonMiddleware',
-    
-    # Session and CSRF middlewares
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",  # CSRF should be enabled for session management
-
-    # Authentication and message handling
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-
-    # Clickjacking protection
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -83,7 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "movie_app.wsgi.application"
 
-# DATABASE CONFIGURATION
+# Database configuration using environment variables
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -95,58 +90,54 @@ DATABASES = {
     }
 }
 
-# PASSWORD VALIDATION
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# INTERNATIONALIZATION
+# Internationalization
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# STATIC FILES CONFIGURATION
+# Static files
 STATIC_URL = "static/"
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# CUSTOM USER MODEL
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# CORS HEADERS SETTINGS
+# CORS Configuration
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
-
-# CSRF SETTINGS
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'https://movielads.net',
+    'https://api.movielads.net',
     'https://main.dri7vaiit2zh6.amplifyapp.com',
-    'https://52.15.132.172',  # Include your EC2 public IP
+    'http://localhost:3000',  # Allow local development access
 ]
 
+# CSRF Settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://movielads.net',
+    'https://api.movielads.net',
+    'https://main.dri7vaiit2zh6.amplifyapp.com',
+]
+
+# Secure cookies settings for HTTPS
 SESSION_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True  # Important for cross-site cookies
-CSRF_COOKIE_SECURE = True  # Important for cross-site cookies
+SESSION_COOKIE_SECURE = True  # Ensure cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only sent over HTTPS
 
-# MEDIA FILES (USER UPLOADED FILES)
+# Media and static files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# AWS S3 STORAGE CONFIGURATION
+# AWS S3 for media storage
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
