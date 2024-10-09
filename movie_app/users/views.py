@@ -65,6 +65,7 @@ def signin(request):
 @csrf_exempt
 @api_view(['POST'])
 def logout(request):
+    print("ASF")
     auth_logout(request)
     response = Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
     response.delete_cookie('csrftoken')
@@ -75,4 +76,5 @@ def logout(request):
 @permission_classes([IsAuthenticated])
 def home(request):
     user = request.user
+    print("YY:", user.data)
     return Response({"message": f"Welcome, {user.username}"}, status=200)
