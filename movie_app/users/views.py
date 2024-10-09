@@ -62,6 +62,7 @@ def signin(request):
 
 
 
+@csrf_exempt
 @api_view(['POST'])
 def logout(request):
     auth_logout(request)
