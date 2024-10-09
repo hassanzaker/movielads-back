@@ -1,3 +1,4 @@
+from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -12,7 +13,6 @@ from .forms import CustomUserCreationForm
 
 
 
-@csrf_exempt
 @api_view(['POST'])
 def signup(request):
     if request.method == 'POST':
@@ -33,19 +33,14 @@ def signin(request):
     user = authenticate(username=username, password=password)
 
     if user:
-        # Log in the user (for session management if needed)
         login(request, user)
-
-        # Create JWT token
         refresh = RefreshToken.for_user(user)
+        avatar_url = user.avatar.url if user.avatar else None
 
-        # Get the avatar URL
-        avatar_url = None
-        if user.avatar:
-            avatar_url = user.avatar.url  # This will provide the URL to the avatar image
+        # Get or set the CSRF token
+        csrf_token = get_token(request)
 
-        # Return the token and user info, including the avatar URL
-        return Response({
+        response = Response({
             "message": "Login Successful",
             "refresh": str(refresh),
             "token": str(refresh.access_token),
@@ -54,9 +49,14 @@ def signin(request):
                 "email": user.email,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
-                "avatar": avatar_url,  # Return the URL of the avatar
+                "avatar": avatar_url,
             }
         }, status=status.HTTP_200_OK)
+
+        # Include the CSRF token in the response cookies
+        response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
+
+        return response
 
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -64,13 +64,14 @@ def signin(request):
 
 @api_view(['POST'])
 def logout(request):
-    auth_logout(request)  # Log out the current user
-    return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
-
+    auth_logout(request)
+    response = Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
+    response.delete_cookie('csrftoken')
+    response.delete_cookie('sessionid')
+    return response
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def home(request):
-    if request.method == 'GET':
-        user = request.user
-        return Response({"message": f"Welcome, {user.username}"}, status=200)
+    user = request.user
+    return Response({"message": f"Welcome, {user.username}"}, status=200)
