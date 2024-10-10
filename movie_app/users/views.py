@@ -29,7 +29,7 @@ def signup(request):
 
 
 
-@ensure_csrf_cookie
+# @ensure_csrf_cookie
 @api_view(['POST'])
 def signin(request):
     username = request.data.get('username')
