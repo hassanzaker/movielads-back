@@ -126,6 +126,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://movielads.net',
     'https://api.movielads.net',
     'https://main.dri7vaiit2zh6.amplifyapp.com',
+    'http://localhost:3000',
 ]
 
 # Secure cookies settings for HTTPS
