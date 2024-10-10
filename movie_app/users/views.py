@@ -48,7 +48,7 @@ def signin(request):
             "message": "Login Successful",
             "refresh": str(refresh),
             "token": str(refresh.access_token),
-            "csrfToken": str(csrf_token),
+            "csrfToken": csrf_token,
             "user": {
                 "username": user.username,
                 "email": user.email,
