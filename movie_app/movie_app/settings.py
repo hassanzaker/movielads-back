@@ -136,6 +136,11 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True  # Ensure cookies are only sent over HTTPS
 CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only sent over HTTPS
 
+# CSRF settings
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"  # This is the default, and Django checks for this header.
+CSRF_USE_SESSIONS = False  # Ensure the CSRF token is stored as a cookie and not in the session.
+
 
 
 # Media and static files

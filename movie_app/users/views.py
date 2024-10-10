@@ -68,12 +68,12 @@ def signin(request):
 
 @api_view(['POST'])
 def logout(request):
-    print("ASF")
     auth_logout(request)
     response = Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
     response.delete_cookie('csrftoken')
     response.delete_cookie('sessionid')
     return response
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
