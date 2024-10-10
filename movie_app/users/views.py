@@ -11,11 +11,16 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth import authenticate, login, logout as auth_logout
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .serializers import UserSerializer
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 
+from .serializers import CustomTokenObtainPairSerializer
 
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 @api_view(['POST'])
 def signup(request):
