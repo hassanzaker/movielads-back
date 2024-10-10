@@ -59,7 +59,7 @@ def signin(request):
         }, status=status.HTTP_200_OK)
 
         # Include the CSRF token in the response cookies
-        response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
+        # response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
 
         return response
 
