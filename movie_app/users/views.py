@@ -59,8 +59,6 @@ def signin(request):
 
         # Include the CSRF token in the response cookies
         response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
-        # Add the Access-Control-Expose-Headers header
-        response["Access-Control-Expose-Headers"] = "X-CSRFToken"
 
         return response
 
