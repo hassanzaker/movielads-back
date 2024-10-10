@@ -133,6 +133,9 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True  # Ensure cookies are only sent over HTTPS
 CSRF_COOKIE_SECURE = True  # Ensure CSRF cookies are only sent over HTTPS
 
+CSRF_FAILURE_VIEW = 'users.views.csrf_failure'
+
+
 # Media and static files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
