@@ -19,13 +19,12 @@ from .forms import CustomUserCreationForm
 
 @api_view(['POST'])
 def signup(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
-        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    form = CustomUserCreationForm(request.POST, request.FILES)
+    if form.is_valid():
+        user = form.save()
+        login(request, user)
+        return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+    return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
