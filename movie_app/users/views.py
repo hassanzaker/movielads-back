@@ -60,7 +60,7 @@ def signin(request):
 
         # Include the CSRF token in the response cookies
         # response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
-        csrf_token = response.COOKIES.get('csrftoken')
+        csrf_token = response.headers
         print("***", csrf_token)
         return response
 
