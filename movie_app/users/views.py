@@ -42,8 +42,8 @@ def signin(request):
         avatar_url = user.avatar.url if user.avatar else None
 
         # Get or set the CSRF token
-        csrf_token = get_token(request)
-
+        csrf_token = request.COOKIES.get('csrftoken')
+        print("^^^", csrf_token)
         response = Response({
             "message": "Login Successful",
             "refresh": str(refresh),
@@ -60,7 +60,8 @@ def signin(request):
 
         # Include the CSRF token in the response cookies
         # response.set_cookie('csrftoken', csrf_token, httponly=True, samesite='None', secure=True)
-
+        csrf_token = response.COOKIES.get('csrftoken')
+        print("***", csrf_token)
         return response
 
     return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
