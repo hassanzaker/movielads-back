@@ -2,6 +2,7 @@ from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -28,7 +29,7 @@ def signup(request):
 
 
 
-
+@ensure_csrf_cookie
 @api_view(['POST'])
 def signin(request):
     username = request.data.get('username')
