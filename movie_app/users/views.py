@@ -1,5 +1,8 @@
 from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated 
@@ -76,3 +79,10 @@ def logout(request):
 def home(request):
     user = request.user
     return Response({"message": f"Welcome, {user.username}"}, status=200)
+
+
+def csrf_failure(request, reason=""):
+    print(f"CSRF failure: {reason}")
+    print(f"Request headers: {request.headers}")
+    print(f"Request cookies: {request.COOKIES}")
+    return HttpResponse(f"CSRF failure: {reason}", status=403)
