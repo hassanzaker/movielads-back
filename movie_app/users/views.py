@@ -32,7 +32,6 @@ def signup(request):
     return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # @ensure_csrf_cookie
 @api_view(['POST'])
 def signin(request):
