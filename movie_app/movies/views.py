@@ -12,6 +12,7 @@ import json
 
 from django.contrib.auth import get_user_model
 from .models import WatchList, SeenList
+from .serializers import WatchListSerializer, SeenListSerializer
 
 User = get_user_model()
 
@@ -126,8 +127,28 @@ def add_movie_to_watch_list(request):
 
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_watchlist(request):
+    user = request.user
+
+    movies = WatchList.objects.filter(user=user).order_by('added_at')
+    # Use the serializer to convert the queryset to JSON
+    serializer = WatchListSerializer(movies, many=True)
+
+    return Response(serializer.data, status=200)  # Return the serialized data as JSON
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_seenlist(request):
+    user = request.user
+
+    movies = SeenList.objects.filter(user=user).order_by('added_at')
+    # Use the serializer to convert the queryset to JSON
+    serializer = SeenListSerializer(movies, many=True)
+
+    return Response(serializer.data, status=200)  # Return the serialized data as JSON
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
