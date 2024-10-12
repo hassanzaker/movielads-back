@@ -60,7 +60,6 @@ def get_all_movies(request):
     list_type = request.query_params.get('list_type')
     page = request.query_params.get('page')
 
-    print(list_type, page)
     if not list_type:
         list_type = "top_rated"
 
@@ -182,7 +181,6 @@ def add_seen_movie(request):
 
     if exists:
         notes = WatchList.objects.get(user=user, movie_id=movie_id).notes
-        print(notes)
     else:
         notes = ''
 
