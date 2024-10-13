@@ -4,7 +4,8 @@ from django.http import HttpResponse
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated 
 from rest_framework import status
@@ -79,3 +80,27 @@ def home(request):
     user = request.user
     return Response({"message": f"Welcome, {user.username}"}, status=200)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@parser_classes([MultiPartParser, FormParser])
+def update_profile(request):
+    user = request.user
+    user.username = request.data.get('username', user.username)
+    user.email = request.data.get('email', user.email)
+    user.birth_date = request.data.get('birth_date', user.birth_date)
+    user.favorite_movie = request.data.get('favorite_movie', user.favorite_movie)
+
+    if 'avatar' in request.FILES:
+        user.avatar = request.FILES['avatar']
+
+    user.save()
+    return Response({"message": "Profile updated successfully", "user": UserSerializer(user).data},
+                    status=status.HTTP_200_OK)
