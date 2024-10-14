@@ -33,7 +33,8 @@ urls = {
     "top_rated": "movie/top_rated",
     "popular": "movie/popular",
     "now_playing": "movie/now_playing",
-    "upcoming": "movie/upcoming"
+    "upcoming": "movie/upcoming",
+    "all": "discover/movie"
 
 }
 
