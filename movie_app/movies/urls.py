@@ -10,4 +10,5 @@ urlpatterns = [
     path('seenlist/', views.get_seenlist, name='get_seenlist'),
     path('watchlist/delete/', views.delete_movies_from_watchlist, name="delete_movies_from_watchlist"),
     path('seen/delete/', views.delete_movies_from_seenlist, name="delete_movies_from_seenlist"),
+    path('search/movie/', views.search_movie, name="search_movie"),
 ]

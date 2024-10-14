@@ -38,6 +38,26 @@ urls = {
 
 }
 
+
+@api_view(['GET'])
+def search_movie(request):
+    try:
+        query = request.query_params.get('query')
+        page = request.query_params.get('page')
+        url = BASE_URL + 'search/movie'
+
+        params = {
+            "query": query,
+            "page": page
+        }
+
+        response = requests.get(url, headers=HEADERS, params=params)
+        content = json.loads(response._content.decode('utf-8'))  # Decode and convert to JSON
+
+        return JsonResponse(content, safe=False, status=200)
+    except Exception as e:
+        return Response("failed retrieving data!", status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(["GET"])
 def get_movie(request, id):
     try:
@@ -68,7 +88,6 @@ def get_all_movies(request):
         url = BASE_URL + urls[list_type]
 
         params = {
-            "language": "en-US",
             "page": page
         }
 
