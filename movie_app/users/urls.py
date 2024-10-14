@@ -9,4 +9,6 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('home/', views.home, name='home'),  # Home view for displaying the welcome message
     path('logout/', views.logout, name="logout"),
+    path('profile/', views.get_profile, name="get_profile"),
+    path('profile/update/', views.update_profile, name="update_profile"),
 ]

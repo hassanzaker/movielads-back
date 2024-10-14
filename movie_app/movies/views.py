@@ -177,10 +177,11 @@ def add_seen_movie(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
-    exists = WatchList.objects.filter(user=user, movie_id=movie_id).exists()
+    exists = WatchList.objects.filter(user=user, movie_id=movie_id)
 
     if exists:
-        notes = WatchList.objects.get(user=user, movie_id=movie_id).notes
+        watchlist_movie = WatchList.objects.get(user=user, movie_id=movie_id)
+        notes = watchlist_movie.notes
     else:
         notes = ''
 
@@ -196,9 +197,59 @@ def add_seen_movie(request):
         }
     )
 
+    watchlist_movie.delete()
+
     if not created:
         return Response({"message": "You have seen this movie before."}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Movie added to Seen List successfully."}, status=status.HTTP_201_CREATED)
 
 
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_movies_from_watchlist(request):
+    # Get user and movie_id(s) from the request
+    user = request.user
+    movie_ids = request.data.get('movie_ids')  # Accepts a list of movie_ids
+
+    # Validate that movie_ids are provided
+    if not movie_ids:
+        return Response({"error": "'movie_ids' is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Check if movie_ids is a list or a single value
+    if not isinstance(movie_ids, list):
+        movie_ids = [movie_ids]  # Make it a list if it's a single movie_id
+
+    # Delete the movies from the user's watchlist
+    deleted, _ = WatchList.objects.filter(user=user, movie_id__in=movie_ids).delete()
+
+    if deleted == 0:
+        return Response({"error": "No movies found in the watchlist."}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({"message": f"{deleted} movie(s) removed from the watchlist."}, status=status.HTTP_200_OK)
+
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_movies_from_seenlist(request):
+    # Get user and movie_id(s) from the request
+    user = request.user
+    movie_ids = request.data.get('movie_ids')  # Accepts a list of movie_ids
+
+    # Validate that movie_ids are provided
+    if not movie_ids:
+        return Response({"error": "'movie_ids' is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Check if movie_ids is a list or a single value
+    if not isinstance(movie_ids, list):
+        movie_ids = [movie_ids]  # Make it a list if it's a single movie_id
+
+    # Delete the movies from the user's watchlist
+    deleted, _ = SeenList.objects.filter(user=user, movie_id__in=movie_ids).delete()
+
+    if deleted == 0:
+        return Response({"error": "No movies found in the watchlist."}, status=status.HTTP_404_NOT_FOUND)
+
+    return Response({"message": f"{deleted} movie(s) removed from the watchlist."}, status=status.HTTP_200_OK)
