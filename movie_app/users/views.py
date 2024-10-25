@@ -76,9 +76,9 @@ def logout(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def home(request):
+def dashboard(request):
     user = request.user
-    return Response({"message": f"Welcome, {user.username}"}, status=200)
+    return Response({"username": user.username, "favorite": user.favorite_movie}, status=200)
 
 
 @api_view(['GET'])
