@@ -45,9 +45,11 @@ def signin(request):
         avatar_url = user.avatar.url if user.avatar else None
 
         # Get or set the CSRF token
+        print(user.id)
         response = Response({
             "message": "Login Successful",
             "user": {
+                "id": user.id,
                 "username": user.username,
                 "email": user.email,
                 "first_name": user.first_name,

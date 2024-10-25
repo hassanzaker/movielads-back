@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'corsheaders',
+    'rest_framework',
     'users',
     'movies',
-    'rest_framework',
+    'trivia_game',
     'storages',
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -98,6 +100,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "movie_app.wsgi.application"
+ASGI_APPLICATION = 'movie_app.asgi.application'
 
 # Database configuration using environment variables
 DATABASES = {
@@ -110,6 +113,31 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis is running on localhost and port 6379
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
