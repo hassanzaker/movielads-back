@@ -9,6 +9,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated 
 from rest_framework import status
+from django.contrib.auth.hashers import check_password
+
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth import authenticate, login, logout as auth_logout
@@ -22,6 +24,27 @@ from .serializers import CustomTokenObtainPairSerializer
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    current_password = request.data.get('current_password')
+    new_password = request.data.get('new_password')
+    confirm_password = request.data.get('confirm_password')
+
+    if not check_password(current_password, user.password):
+        return Response({"error": "Current password is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if new_password != confirm_password:
+        return Response({"error": "New passwords do not match"}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save()
+
+    return Response({"message": "Password updated successfully"}, status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def signup(request):
